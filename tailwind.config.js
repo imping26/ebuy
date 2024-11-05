@@ -8,6 +8,9 @@ export default {
     container: {
       padding: '1rem',
     },
+    // fontFamily: {
+
+    // },
     extend: {},
   },
   plugins: [],

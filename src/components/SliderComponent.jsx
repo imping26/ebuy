@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-function SliderComponent({ items = [], components: Components }) {
+function SliderComponent({ items = [], components: Components, config }) {
   const settings = {
     infinite: true,
     speed: 500,
@@ -72,7 +72,7 @@ function SliderComponent({ items = [], components: Components }) {
   return (
     <div className="slider-container pt-5 pb-2">
       {Components ? (
-        <Slider {...settings}>
+        <Slider {...(config ? config : settings)}>
           {items.map((items, index) => {
             return <Components key={index} items={items} />;
           })}

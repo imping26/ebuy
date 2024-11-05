@@ -3,7 +3,7 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="p-3  border-t-2">
+    <footer className="p-3 mt-10 border-t-2">
 
       <div className="max-w-[1200px] mx-auto">
         <div className="py-6">

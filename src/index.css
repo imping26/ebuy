@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,4 +7,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+@layer base {
+    html {
+        font-family: "Outfit", sans-serif;
+    }
+
+    .title {
+        @apply font-semibold text-2xl md:text-3xl;
+    }
+
+    .title-thin {
+        @apply font-normal text-2xl md:text-3xl;
+    }
+
+    button{
+        @apply cursor-pointer;
+    }
 }
