@@ -7,7 +7,7 @@ function ProductItem({ items, space = false }) {
   const navigate = useNavigate();
 
   function goDetailHandler() {
-    navigate(`/products/${id}`); 
+    navigate(`/product/${id}`); 
   }
 
   return (

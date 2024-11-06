@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import hero from "../../assets/bn_hero.png";
+import React from "react";
 import { ChevronRight } from "lucide-react";
 import Men from "../../assets/Men.png";
-import { PRODUCT_DATA } from "../../data/data";
+import useProductList from "../../hook/useProductList";
+import { Link } from "react-router-dom";
 
 function CategoryItem({ item }) {
   return (
-    <div
+    <Link
+      to={`/products/${item}`}
       className={`text-center relative max-w-[400px] h-[230px] flex flex-col gap-4 justify-center items-center`}
     >
       <img src={Men} alt="" />
@@ -19,20 +20,12 @@ function CategoryItem({ item }) {
           <ChevronRight size={16} className="text-white font-bold" />
         </div>
       </button>
-    </div>
+    </Link>
   );
 }
 
-function CategoryPage() {
-  
-  const [Category, setCategories] = useState([]);
-
-  useEffect(() => {
-    const uniqueCategories = [
-      ...new Set(PRODUCT_DATA.flatMap((product) => product.category)),
-    ];
-    setCategories(uniqueCategories);
-  }, []); 
+function Shop() {
+  const { categories } = useProductList();
 
   return (
     <>
@@ -47,7 +40,7 @@ function CategoryPage() {
 
       <section>
         <div className="p-3 md:px-10 grid grid-cols-1 md:grid-cols-3 gap-7">
-          {Category.map((item) => {
+          {categories.map((item) => {
             return <CategoryItem item={item} key={item} />;
           })}
         </div>
@@ -56,4 +49,4 @@ function CategoryPage() {
   );
 }
 
-export default CategoryPage;
+export default Shop;

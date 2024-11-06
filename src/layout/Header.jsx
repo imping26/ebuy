@@ -2,6 +2,7 @@ import { Menu, Search, ShoppingCart, Heart } from "lucide-react";
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import SocialBlock from "./SocialBlock";
+import { useProductStore } from "../store/productStore";
 
 const NAVIGATE_MENU_ITEM = [
   {
@@ -14,7 +15,7 @@ const NAVIGATE_MENU_ITEM = [
   },
   {
     title: "PRODUCTS",
-    path: "products",
+    path: "products/all",
   },
   {
     title: "BLOG",
@@ -23,11 +24,22 @@ const NAVIGATE_MENU_ITEM = [
 ];
 
 function Header() {
+  const store = useProductStore();
+
+  const toggleCart = () => {
+    store.toggleCartTab();
+  };
+
+  const TotalItem = store.cartItem.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+
   return (
     <header>
       <SocialBlock />
       <div className="max-w-[1280px] mx-auto px-3 py-4 flex items-center justify-between">
-        <button className="sm:hidden">
+        <button className="sm:hidden" onClick={toggleCart}>
           <Menu />
         </button>
         <Link to="/" className="flex-2">
@@ -59,10 +71,10 @@ function Header() {
               2
             </span>
           </button>
-          <button className="relative">
+          <button className="relative" onClick={toggleCart}>
             <ShoppingCart />
             <span className="absolute rounded-[20px] bottom-[19px] text-center left-[12px]  text-[12px] font-[500] bg-black text-white h-[18px] w-[18px]">
-              8
+              {TotalItem}
             </span>
           </button>
         </div>
