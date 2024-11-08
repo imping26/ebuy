@@ -5,6 +5,7 @@ import CartItem from "../components/CartItem";
 
 function CartTab() {
   const store = useProductStore();
+ 
   return (
     <div
       className={`fixed top-0 right-0 bg-white w-full sm:w-96 shadow-2xl h-full grid grid-rows-[60px_1fr_60px] transform transition-transform duration-500 ${
@@ -22,7 +23,7 @@ function CartTab() {
           <X />
         </button>
       </div>
-      <div>
+      <div className=" overflow-y-scroll">
         {store.cartItem.length > 0 ? (
           store.cartItem.map((item, index) => {
             return <CartItem key={index} item={item} />;

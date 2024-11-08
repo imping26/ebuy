@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PRODUCT_DATA } from "../../data/data";
-import { ChevronRight, Truck, Heart, MessageCircleMore} from "lucide-react";
+import { ChevronRight, Truck, Heart, MessageCircleMore } from "lucide-react";
 import { useProductStore } from "../../store/productStore";
+import CheckBox from "../../components/CheckBox";
 
 function ProductDetails() {
   const { id } = useParams();
+  const [selectedSizes, setSelectedSizes] = useState(null);
+  const [error, setError] = useState("");
   const [item, setItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const store = useProductStore();
@@ -18,7 +21,7 @@ function ProductDetails() {
       return;
     }
     setItem(detail_item);
-  }, []);
+  }, [id]);
 
   if (!item) {
     return <div>loading...</div>;
@@ -34,7 +37,20 @@ function ProductDetails() {
   }
 
   function addToCart() {
-    store.addToCart({ productId: id, quantity: quantity });
+    if (item.size.length > 0 && !selectedSizes) {
+      setError("Please select size");
+      return;
+    }
+    setError("");
+    store.addToCart({
+      productId: id,
+      quantity: quantity,
+      ...(selectedSizes ? { size: selectedSizes } : {}),
+    });
+  }
+
+  function onChange(size) {
+    setSelectedSizes(size);
   }
 
   return (
@@ -75,9 +91,7 @@ function ProductDetails() {
                 {item.name}
               </p>
               <p className="text-3xl md:text-4xl">RM {item.price}</p>
-              <p className="text-slate-500 text-lg">
-                {item.ShortDescription}
-              </p>
+              <p className="text-slate-500 text-lg">{item.ShortDescription}</p>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 pt-2 gap-2 sm:gap-0">
                 <button className="flex items-center gap-1">
@@ -99,16 +113,17 @@ function ProductDetails() {
               {item.size.length > 0 ? (
                 <div className="py-3 md:py-5">
                   <p className="pb-2">Size:</p>
-                  <div className="flex gap-3">
+                  <div className="flex flex-wrap gap-3">
                     {item.size.map((item) => (
-                      <button
+                      <CheckBox
                         key={item}
-                        className="border w-[50px] text-center"
-                      >
-                        {item}
-                      </button>
+                        label={item}
+                        value={selectedSizes === item}
+                        onChange={() => onChange(item)}
+                      />
                     ))}
                   </div>
+                  {error ? <div className="text-red-700">{error}</div> : null}
                 </div>
               ) : null}
 
@@ -134,24 +149,28 @@ function ProductDetails() {
               >
                 Add To Cart
               </button>
+
+              <div className="  py-2 sm:">
+                <h4 className="text-black text-lg">
+                  Sku: <span className="text-md text-slate-500">{id}</span>
+                </h4>
+                <h4 className="text-black text-lg">
+                  Available:{" "}
+                  <span className="text-md text-slate-500">{item.stock}</span>
+                </h4>
+                <h4 className="text-black text-lg">
+                  Category:{" "}
+                  <span className="text-md text-slate-500">
+                    {item.category.join(",")}
+                  </span>
+                </h4>
+                {/* <h4 className="text-black text-lg">
+                share: <span className="text-md text-slate-500"><Facebook/></span>
+              </h4> */}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="container py-2">
-        <h4 className="text-black text-lg">
-          Sku: <span className="text-md text-slate-500">{id}</span>
-        </h4>
-        <h4 className="text-black text-lg">
-          Available: <span className="text-md text-slate-500">{item.stock}</span>
-        </h4>
-        <h4 className="text-black text-lg">
-          Category: <span className="text-md text-slate-500">{item.category.join(",")}</span>
-        </h4>
-        {/* <h4 className="text-black text-lg">
-          share: <span className="text-md text-slate-500"><Facebook/></span>
-        </h4> */}
       </div>
     </>
   );

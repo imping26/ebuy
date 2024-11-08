@@ -6,8 +6,6 @@ import ShopPage from "./pages/Shop/Shop";
 import ProductsPage from "./pages/Products/ProductsPage";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Category from "./pages/Category/Category";
-import { useEffect } from "react";
-import { useProductStore } from "./store/productStore";
 
 const router = createBrowserRouter([
   {
@@ -38,12 +36,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  //initial
-  const setProducts = useProductStore((state) => state.setProductItem);
-  useEffect(() => {
-    setProducts();
-  }, []);
-
   return <RouterProvider router={router} />;
 }
 

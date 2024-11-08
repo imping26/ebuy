@@ -3,15 +3,18 @@ import { Filter } from "lucide-react";
 import ProductItem from "../../components/ProductItem";
 import { useParams } from "react-router-dom";
 import { useProductStore } from "../../store/productStore";
+import useProductList from "../../hook/useProductList";
 
 function Category() {
   const { category } = useParams();
-  const { setProductItem, productItem } = useProductStore();
+  const { setProductItem } = useProductStore();
+  const { productItem } = useProductList();
 
   useEffect(() => {
     setProductItem(category);
-  }, [category]);
+  }, [category,setProductItem]);
 
+  console.log("Category component rendered");
   return (
     <section className="max-w-[1200px] mx-auto pt-10">
       <button className="flex items-center justify-center gap-1 py-2 px-3 bg-stone-200 rounded-sm">

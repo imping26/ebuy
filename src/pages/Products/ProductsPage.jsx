@@ -1,16 +1,11 @@
 import { ChevronRight } from "lucide-react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import useProductList from "../../hook/useProductList";
-import { useEffect } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import useProductList from "../../hook/useProductList"; 
 
 function ProductsPage() {
-  const navigate = useNavigate();
-  const { categories } = useProductList();
 
-  // useEffect(() => {
-  //   navigate("/products/all");
-  // }, [navigate]);
-
+  const { categories } = useProductList(); 
+  
   return (
     <>
       <div className="w-full h-[35vh] xl:h-[45vh] mb-[30px] relative  bg-[url('./assets/bn_hero.png')] bg-cover flex flex-col items-center justify-center gap-1 sm:gap-3">

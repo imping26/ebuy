@@ -10,28 +10,27 @@ export const useProductStore = create((set, get) => ({
   setProductItem: (data) =>
     set(() => {
       //temp
-      if (data === "all") return { productItem: PRODUCT_DATA };
+      if (data === "all" || !data) return { productItem: PRODUCT_DATA };
+
       const filterData = PRODUCT_DATA.filter((item) => {
         return item.category.includes(data);
-      }); 
+      });
       return { productItem: filterData };
     }),
-  //   setCategories: () =>
-  //     set(() => {
-  //       console.log("renderCat.");
-  //       const uniqueCategories = [
-  //         ...new Set(get().productItem.flatMap((product) => product.category)),
-  //       ];
-
-  //       return { categories: uniqueCategories };
-  //     }),
   toggleCartTab: () =>
     set((state) => ({ cartTabIsOpen: !state.cartTabIsOpen })),
   addToCart: (item) =>
     set((state) => {
-      const productIndex = state.cartItem.findIndex(
-        (i) => i.productId === item.productId
-      );
+      let productIndex;
+      if (item.size) {
+        productIndex = state.cartItem.findIndex(
+          (i) => i.productId === item.productId && i.size === item.size
+        );
+      } else {
+        productIndex = state.cartItem.findIndex(
+          (i) => i.productId === item.productId
+        );
+      }
       let updatedCartItem;
       if (productIndex >= 0) {
         updatedCartItem = [...state.cartItem];
@@ -46,12 +45,20 @@ export const useProductStore = create((set, get) => ({
         cartItem: updatedCartItem,
       };
     }),
+
   changeQuantity: (data) =>
     set((state) => {
-      const { productId, quantity } = data;
-      const productIndex = state.cartItem.findIndex(
-        (i) => i.productId === productId
-      );
+      const { productId, quantity, size } = data;
+      let productIndex;
+      if (size) {
+        productIndex = state.cartItem.findIndex(
+          (i) => i.productId === productId && i.size === size
+        );
+      } else {
+        productIndex = state.cartItem.findIndex(
+          (i) => i.productId === productId
+        );
+      }
       if (quantity > 0) {
         const updatedCartItem = [...state.cartItem];
         updatedCartItem[productIndex].quantity = quantity;
@@ -65,5 +72,21 @@ export const useProductStore = create((set, get) => ({
           ),
         };
       }
+    }),
+  deleteCartItem: (data) =>
+    set((state) => {
+      const { productId, size } = data;
+      const currentProduct = state.cartItem.filter(
+        (item) => item.productId === productId
+      );
+      //check if some product but diff size
+      if (currentProduct.length > 1) {
+        return {
+          cartItem: state.cartItem.filter((item) => item.size !== size),
+        };
+      }
+      return {
+        cartItem: state.cartItem.filter((item) => item.productId !== productId),
+      };
     }),
 }));

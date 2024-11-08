@@ -39,7 +39,7 @@ function Shop() {
       </div>
 
       <section>
-        <div className="p-3 md:px-10 grid grid-cols-1 md:grid-cols-3 gap-7">
+        <div className="p-3 md:px-10 grid grid-cols-1 sm:grid-cols-2 place-content-center md:grid-cols-3 gap-7">
           {categories.map((item) => {
             return <CategoryItem item={item} key={item} />;
           })}
