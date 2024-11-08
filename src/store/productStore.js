@@ -67,9 +67,12 @@ export const useProductStore = create((set, get) => ({
         };
       } else {
         return {
-          cartItem: state.cartItem.filter(
-            (item) => item.productId !== productId
-          ),
+          cartItem: state.cartItem.filter((item) => {
+            if (size) {
+              return !(item.productId === productId && item.size === size); 
+            }
+            return item.productId !== productId; 
+          }),
         };
       }
     }),
