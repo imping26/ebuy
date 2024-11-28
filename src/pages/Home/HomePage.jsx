@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Hero from "../../assets/hero.jpg";
 import ProductItem from "../../components/ProductItem";
 import { PRODUCT_DATA, SLIDER_DATA } from "../../data/data";
@@ -8,6 +8,8 @@ import deco2 from "../../assets/2.png";
 import deco3 from "../../assets/3.png";
 import HomeContentSection from "./view/HomeContentSection";
 import Button from "../../components/Button";
+import { useProductStore } from "../../store/productStore";
+import { useQuery } from "@tanstack/react-query";
 
 const settings_trending_collection = {
   dots: true,
@@ -37,6 +39,18 @@ function sliderItem({ items }) {
 }
 
 function HomePage() {
+  const getProduct = useProductStore((state) => state.getProductData);
+
+  const { data, isPending } = useQuery({
+    queryKey: ["getProduct"],
+    queryFn: getProduct,
+  });
+
+  let sliderDisplay;
+  if (data) {
+    sliderDisplay = data.slice(1, 5);
+  }
+
   return (
     <>
       <div className="relative">
@@ -47,7 +61,7 @@ function HomePage() {
           <p className="text-5xl sm:text-6xl font-semibold text-center lg:text-7xl">
             Summer <br /> Collection
           </p>
-          <button className="p-3 mt-3 bg-black text-sm text-white w-[130px] hover:text-black border-2 border-black hover:bg-white hover:border-black transition-all ease-in-out">
+          <button className="p-3 mt-3 bg-black text-sm text-white w-[130px] hover:text-black border-2 border-black hover:bg-white hover:border-black transition-colors durantion-500 ease-in-out">
             Shop Collection
           </button>
         </div>
@@ -66,14 +80,27 @@ function HomePage() {
           </p>
         </div>
         <div className="py-5 grid grid-cols-2 gap-3 md:gap-6 container mx-auto md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 relative">
-          {PRODUCT_DATA.map((item, index) => {
-            return <ProductItem key={index} items={item} />;
-          })}
+          {isPending && (
+            <div className="flex items-center justify-center">
+              <div
+                className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                role="status"
+              >
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+              </div>
+            </div>
+          )}
+          {data &&
+            data.map((item, index) => {
+              return <ProductItem key={index} items={item} />;
+            })}
         </div>
       </section>
 
       <HomeContentSection className="bg-stone-200 mt-10">
-        <h1 className="title-thin">A Demo Fashion Store</h1>
+        <h1 className="text-4xl md:text-6xl">A Demo Fashion Store</h1>
         <p className="sm:pt-3">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio
           voluptatibus sunt aut molestiae voluptate dolorem!
@@ -90,7 +117,7 @@ function HomePage() {
         </div>
         <div className="container mx-auto mb-10">
           <SliderComponent
-            items={PRODUCT_DATA}
+            items={sliderDisplay}
             config={settings_trending_collection}
             components={(item) => {
               const { items } = item;

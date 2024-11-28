@@ -9,8 +9,7 @@ function SliderComponent({ items = [], components: Components, config }) {
     speed: 500,
     autoplay: true,
     slidesToShow: 6,
-    slidesToScroll: 1,
-    infinite: true,
+    slidesToScroll: 1, 
     arrows: false,
     dots: false,
     responsive: [
@@ -81,5 +80,6 @@ function SliderComponent({ items = [], components: Components, config }) {
     </div>
   );
 }
+
 
 export default SliderComponent;

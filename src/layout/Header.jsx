@@ -1,6 +1,6 @@
 import { Menu, Search, ShoppingCart, Heart } from "lucide-react";
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import SocialBlock from "./SocialBlock";
 import { useProductStore } from "../store/productStore";
 
@@ -15,7 +15,7 @@ const NAVIGATE_MENU_ITEM = [
   },
   {
     title: "PRODUCTS",
-    path: "products/all",
+    path: "products",
   },
   {
     title: "BLOG",
@@ -25,7 +25,7 @@ const NAVIGATE_MENU_ITEM = [
 
 function Header() {
   const store = useProductStore();
-
+  const navigate = useNavigate();
   const toggleCart = () => {
     store.toggleCartTab();
   };
@@ -34,7 +34,12 @@ function Header() {
     (acc, item) => acc + item.quantity,
     0
   );
+  
+  const goWishlistPage = () => {
+    navigate("/wishlist");
+  };
 
+  const wishlist = store.wishList.length; 
   return (
     <header>
       <SocialBlock />
@@ -56,7 +61,7 @@ function Header() {
                   isActive ? "font-semibold underline underline-offset-4" : ""
                 }
               >
-                <li className="text-lg">{title}</li>
+                <li className="">{title}</li>
               </NavLink>
             );
           })}
@@ -65,10 +70,10 @@ function Header() {
           <button>
             <Search />
           </button>
-          <button className="relative">
+          <button className="relative" onClick={goWishlistPage}>
             <Heart />
             <span className="absolute rounded-[20px] bottom-[19px] text-center left-[12px]  text-[12px] font-[500] bg-black text-white h-[18px] w-[18px]">
-              2
+              {wishlist}
             </span>
           </button>
           <button className="relative" onClick={toggleCart}>

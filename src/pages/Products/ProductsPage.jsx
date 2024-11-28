@@ -1,11 +1,25 @@
 import { ChevronRight } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
-import useProductList from "../../hook/useProductList"; 
+import { Link, useSearchParams } from "react-router-dom"; 
+import { useProductStore } from "../../store/productStore";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import Category from "./view/Category";
 
 function ProductsPage() {
 
-  const { categories } = useProductList(); 
-  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const store = useProductStore();
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["getCategory"],
+    queryFn: () => store.getCategory(),
+  });
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
+  if (isError) {
+    return <div>Error</div>;
+  }
+
   return (
     <>
       <div className="w-full h-[35vh] xl:h-[45vh] mb-[30px] relative  bg-[url('./assets/bn_hero.png')] bg-cover flex flex-col items-center justify-center gap-1 sm:gap-3">
@@ -17,32 +31,36 @@ function ProductsPage() {
         </p>
         <div>
           <ul className="text-white text-lg flex gap-6 mt-5">
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? "underline text-black" : undefined
+            <Link
+              className={
+                !searchParams.get("category")
+                  ? "underline text-black"
+                  : undefined
               }
-              to="/products/all"
+              to="/products"
             >
               All
-            </NavLink>
-            {categories.map((category) => {
+            </Link>
+            {data.map((category, index) => {
+              const { id, name } = category;
               return (
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "underline text-black" : undefined
+                <Link
+                  className={
+                    id === Number(searchParams.get("category"))
+                      ? "underline text-black"
+                      : undefined
                   }
-                  key={category}
-                  to={`/products/${category}`}
+                  key={id}
+                  to={`/products?category=${id}`}
                 >
-                  {category}
-                </NavLink>
+                  {name}
+                </Link>
               );
             })}
           </ul>
         </div>
       </div>
-
-      <Outlet />
+      <Category />
     </>
   );
 }

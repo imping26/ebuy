@@ -7,10 +7,11 @@ const useCategoryList = () => {
   const setProductItem = useProductStore((state) => state.setProductItem);
   const setCategories = useProductStore((state) => state.setCategories);
   useEffect(() => {
-    setProductItem();
+    // setProductItem();
     setCategories();
     setLoading(false);
   }, []);
+  console.log("render useCategoryList")
   return { categories, loading };
 };
 

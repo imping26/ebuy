@@ -5,7 +5,9 @@ import Layout from "./layout/Layout";
 import ShopPage from "./pages/Shop/Shop";
 import ProductsPage from "./pages/Products/ProductsPage";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
-import Category from "./pages/Category/Category";
+import Category from "./pages/Products/view/Category";
+import WishlistPage from "./pages/Wishlist/WishlistPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -23,20 +25,29 @@ const router = createBrowserRouter([
       {
         path: "products",
         element: <ProductsPage />,
-        children: [
-          {
-            path: ":category",
-            element: <Category />,
-          },
-        ],
+        // children: [
+        //   {
+        //     path: ":category",
+        //     element: <Category />,
+        //   },
+        // ],
       },
-      { path: "product/:id", element: <ProductDetails /> },
+      {
+        path: "product/:id",
+        element: <ProductDetails />,
+      },
+      { path: "wishlist", element: <WishlistPage /> },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  const queryClient = new QueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

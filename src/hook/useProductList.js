@@ -7,9 +7,12 @@ const useProductList = () => {
   const cartItem = useProductStore((state) => state.cartItem);
   const categories = useProductStore((state) => state.categories);
   const setProductItem = useProductStore((state) => state.setProductItem);
-  useEffect(() => {
-    setProductItem(); 
-  }, []); 
+  // useEffect(() => {
+    
+  //     setProductItem();
+ 
+  // }, []);
+  console.log("render use product list")
   return { productItem, cartItem, categories };
 };
 
